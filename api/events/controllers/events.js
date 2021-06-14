@@ -13,12 +13,12 @@ module.exports = {
 
   async create(ctx) {
     let entity;
-    if (ctx.is('multipart')) {
+    if (ctx.is("multipart")) {
       const { data, files } = parseMultipartData(ctx);
       data.user = ctx.state.user.id;
       entity = await strapi.services.events.create(data, { files });
     } else {
-      ctx.request.body.author = ctx.state.user.id;
+      ctx.request.body.user = ctx.state.user.id;
       entity = await strapi.services.events.create(ctx.request.body);
     }
     return sanitizeEntity(entity, { model: strapi.models.events });
@@ -54,22 +54,19 @@ module.exports = {
 
   // Delete events with owner user only
 
-  async create(ctx) {
+  async delete(ctx) {
     const { id } = ctx.params;
-
-    let entity;
 
     const [events] = await strapi.services.events.find({
       id: ctx.params.id,
-      'user.id': ctx.state.user.id,
+      "user.id": ctx.state.user.id,
     });
 
     if (!events) {
-      return ctx.unauthorized(`You can't delete this entry`);
+      return ctx.unauthorized(`You can't update this entry`);
     }
 
-    entity = await strapi.services.events.delete({ id });
-
+    const entity = await strapi.services.events.delete({ id });
     return sanitizeEntity(entity, { model: strapi.models.events });
   },
 

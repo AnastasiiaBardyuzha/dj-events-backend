@@ -1,8 +1,6 @@
 'use strict';
 const { sanitizeEntity, parseMultipartData } = require('strapi-utils')
 
-const { default: createStrapi } = require("strapi");
-
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
  * to customize this controller
@@ -23,7 +21,7 @@ module.exports = {
     }
     return sanitizeEntity(entity, { model: strapi.models.events });
   },
-
+  
   // Update events with owner user only
 
   async update(ctx) {
